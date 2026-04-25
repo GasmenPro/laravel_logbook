@@ -1,4 +1,4 @@
-{{-- resources/views/admin/all-logs.blade.php --}}
+{{-- resources/views/admin/all-logs.blade.phpsdsdsd --}}
 @extends('layouts.app')
 
 @section('content')
