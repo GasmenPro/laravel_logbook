@@ -46,6 +46,19 @@ class EmployeeController extends Controller
         $userId = Session::get('user_id');
         $today = Carbon::today();
         
+        // Close any previous open logs (from past days without time out)
+        $openLogs = TimeLog::where('user_id', $userId)
+                ->whereNull('time_out')
+                ->whereDate('log_date', '<', $today)
+                ->get();
+        
+        foreach ($openLogs as $log) {
+            // Set time_out to 11:59:59 PM of that log's date
+            $logDate = $log->log_date->format('Y-m-d');
+            $log->update(['time_out' => $logDate . ' 23:59:59']);
+        }
+        
+        // Check for today's existing time in
         $existingLog = TimeLog::where('user_id', $userId)
                              ->whereDate('log_date', $today)
                              ->first();
